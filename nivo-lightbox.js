@@ -133,7 +133,7 @@
 		checkContent: function( link ) {
 			var $this = this,
                 href = link.attr('href'),
-                video = href.match(/(youtube|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/);
+                video = href.match(/(youtube|youtube-nocookie|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/);
 
             if(href.match(/\.(jpeg|jpg|gif|png)$/i) !== null){
 				return true;
@@ -161,7 +161,7 @@
         processContent: function(content, link){
             var $this = this,
                 href = link.attr('href'),
-                video = href.match(/(youtube|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/),
+                video = href.match(/(youtube|youtube-nocookie|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/),
                 nLBoxWrap = $('.nivo-lightbox-wrap');
 
             nLBoxWrap.removeClass('nivo-lightbox-content-zoom-in-div').addClass('nivo-lightbox-content-zoom-out-div');
@@ -218,6 +218,10 @@
 
                 if(video[1] == 'youtube'){
                     src = 'http://www.youtube.com/embed/'+ video[4];
+                    classTerm = 'nivo-lightbox-youtube';
+                }
+                if(video[1] == 'youtube-nocookie'){
+                    src = href; //https://www.youtube-nocookie.com/embed/...
                     classTerm = 'nivo-lightbox-youtube';
                 }
                 if(video[1] == 'youtu'){
