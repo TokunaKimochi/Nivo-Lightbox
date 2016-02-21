@@ -19,6 +19,7 @@ $img: "./themes/default";
 .nivo-lightbox-theme-default .nivo-lightbox-content.nivo-lightbox-loading { background: url(#{$img}/loading.gif) no-repeat 50% 50%; }
 
 .nivo-lightbox-theme-default .nivo-lightbox-nav {
+    position: fixed;
 	top: 10%;
 	width: 8%;
 	height: 80%;

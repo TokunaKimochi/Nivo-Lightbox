@@ -151,8 +151,10 @@
         processContent: function(content, link){
             var $this = this,
                 href = link.attr('href'),
-                video = href.match(/(youtube|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/);
+                video = href.match(/(youtube|youtu|vimeo)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/),
+                nLBoxWrap = $('.nivo-lightbox-wrap');
 
+            nLBoxWrap.css('height', '80%');
             content.html('').addClass('nivo-lightbox-loading');
 
             // Is HiDPI?
@@ -169,16 +171,11 @@
 					content.html(wrap).removeClass('nivo-lightbox-loading');
 
 					// Vertically center images
-					wrap.css({
-						'line-height': $('.nivo-lightbox-content').height() +'px',
-						'height': $('.nivo-lightbox-content').height() +'px' // For Firefox
-					});
+					nLBoxWrap.css('height', 'auto');
 					$(window).resize(function() {
-						wrap.css({
-							'line-height': $('.nivo-lightbox-content').height() +'px',
-							'height': $('.nivo-lightbox-content').height() +'px' // For Firefox
-						});
+						nLBoxWrap.css('height', 'auto');
 					});
+                    $('body').css('overflow', 'hidden');
 				}).each(function() {
 					if(this.complete) $(this).load();
 				});
@@ -333,6 +330,7 @@
                 overlay.on('click', function(e){
                     if(e.target === this || $(e.target).hasClass('nivo-lightbox-content') || $(e.target).hasClass('nivo-lightbox-image')){
                         $this.destructLightbox();
+                        $('body').css('overflow', 'visible');
                     }
                 });
             }
@@ -340,6 +338,7 @@
             close.on('click', function(e){
                 e.preventDefault();
                 $this.destructLightbox();
+                $('body').css('overflow', 'visible');
             });
 
             return overlay;
