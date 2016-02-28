@@ -23,7 +23,8 @@
             onPrev: function(element){},
             onNext: function(element){},
             errorMessage: 'The requested content cannot be loaded. Please try again later.'
-        };
+        },
+        prevNextFlag = null;
 
     function NivoLightbox(element, options){
         this.el = element;
@@ -88,6 +89,7 @@
 			this.processContent( content, currentLink );
 
             // Nav
+            prevNextFlag = null;
             if(this.$el.attr('data-lightbox-gallery')){
                 var galleryItems = $('[data-lightbox-gallery="'+ this.$el.attr('data-lightbox-gallery') +'"]');
 
@@ -96,6 +98,7 @@
 				// Prev
                 $('.nivo-lightbox-prev').off('click').on('click', function(e){
                     e.preventDefault();
+                    prevNextFlag = 'P';
                     var index = galleryItems.index(currentLink);
                     currentLink = galleryItems.eq(index - 1);
                     if(!$(currentLink).length) currentLink = galleryItems.last();
@@ -106,6 +109,7 @@
                 // Next
                 $('.nivo-lightbox-next').off('click').on('click', function(e){
                     e.preventDefault();
+                    prevNextFlag = 'N';
                     var index = galleryItems.index(currentLink);
                     currentLink = galleryItems.eq(index + 1);
                     if(!$(currentLink).length) currentLink = galleryItems.first();
@@ -170,11 +174,13 @@
                     wrap.append(img);
 					content.html(wrap).removeClass('nivo-lightbox-loading');
 
-					// Vertically center images
 					nLBoxWrap.css('height', 'auto');
 					$(window).resize(function() {
 						nLBoxWrap.css('height', 'auto');
 					});
+
+                    $this.prevNextContentEffect( wrap );
+
                     $('body').css('overflow', 'hidden');
 				}).each(function() {
 					if(this.complete) $(this).load();
@@ -183,6 +189,7 @@
 				img.error(function() {
 					var wrap = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
                     content.html(wrap).removeClass('nivo-lightbox-loading');
+                    $this.prevNextContentEffect( wrap );
 				});
             }
             // Video (Youtube/Vimeo)
@@ -213,7 +220,10 @@
                         scrolling: 'auto'
                     });
                     content.html(iframeVideo);
-                    iframeVideo.load(function(){ content.removeClass('nivo-lightbox-loading'); });
+                    iframeVideo.load(function(){
+                        content.removeClass('nivo-lightbox-loading');
+                        $this.prevNextContentEffect( iframeVideo );
+                    });
                 }
             }
             // AJAX
@@ -243,10 +253,13 @@
 								});
 							}
 						});
+
+                       $this.prevNextContentEffect( wrap );
 					},
 					error: function(){
 						var wrap = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
                         content.html(wrap).removeClass('nivo-lightbox-loading');
+                        $this.prevNextContentEffect( wrap );
 					}
 				});
             }
@@ -274,9 +287,12 @@
 							});
 						}
 					});
+
+                    $this.prevNextContentEffect( wrap );
 				} else {
 					var wrapError = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
                     content.html(wrapError).removeClass('nivo-lightbox-loading');
+                    $this.prevNextContentEffect( wrap );
 				}
             }
             // iFrame (default)
@@ -290,7 +306,10 @@
                     scrolling: 'auto'
                 });
                 content.html(iframe);
-                iframe.load(function(){ content.removeClass('nivo-lightbox-loading'); });
+                iframe.load(function(){
+                    content.removeClass('nivo-lightbox-loading');
+                    $this.prevNextContentEffect( iframe );
+                });
             } else {
 				return false;
 			}
@@ -377,7 +396,17 @@
 			if(window.devicePixelRatio > 1) return true;
 			if(window.matchMedia && window.matchMedia(mediaQuery).matches) return true;
 			return false;
-		}
+		},
+
+        prevNextContentEffect: function( content ){
+            if (prevNextFlag === 'P') {
+                content.addClass('nivo-lightbox-prev-content-effect');
+            }
+            else if (prevNextFlag === 'N') {
+                content.addClass('nivo-lightbox-next-content-effect');
+            }
+            prevNextFlag = null;
+        }
 
     };
 
