@@ -202,10 +202,10 @@
                         }
                     });
 				}).each(function() {
-					if(this.complete) $(this).load();
+					if(this.complete) $(this).trigger('load');
 				});
 
-				img.error(function() {
+                img.on('error', function() {
 					var wrap = $('<div class="nivo-lightbox-error"><p>'+ $this.options.errorMessage +'</p></div>');
                     content.html(wrap).removeClass('nivo-lightbox-loading');
                     $this.contentFrameInEffect( wrap );
@@ -240,7 +240,7 @@
                         scrolling: 'auto'
                     });
                     content.html(iframeVideo);
-                    iframeVideo.load(function(){
+                    iframeVideo.on('load', function(){
                         content.removeClass('nivo-lightbox-loading');
                         $this.contentFrameInEffect( iframeVideo );
                     });
@@ -333,7 +333,7 @@
                     scrolling: 'auto'
                 });
                 content.html(iframe);
-                iframe.load(function(){
+                iframe.on('load', function(){
                     content.removeClass('nivo-lightbox-loading');
                     $this.contentFrameInEffect( iframe );
                 });
