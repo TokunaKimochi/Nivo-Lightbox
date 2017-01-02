@@ -25,7 +25,12 @@
             onNext: function(element){},
             errorMessage: 'The requested content cannot be loaded. Please try again later.'
         },
-        prevNextFlag = null;
+        prevNextFlag = null,
+        hasTouch = (function() {
+            var div = document.createElement('div');
+            div.setAttribute('ontouchstart', 'return');
+            return typeof div.ontouchstart === 'function';
+        })();
 
     function NivoLightbox(element, options){
         this.el = element;
@@ -91,37 +96,41 @@
 
             // Nav
             if(this.$el.attr('data-lightbox-gallery')){
-                var galleryItems = $('[data-lightbox-gallery="'+ this.$el.attr('data-lightbox-gallery') +'"]');
+                var galleryItems = $('[data-lightbox-gallery="'+ this.$el.attr('data-lightbox-gallery') +'"]'),
+                    prevLinkFunc = function( e ){
+                        e.preventDefault();
+                        prevNextFlag = 'P';
+                        $this.contentFrameOutEffect();
+                        var index = galleryItems.index(currentLink);
+                        currentLink = galleryItems.eq(index - 1);
+                        if(!$(currentLink).length) currentLink = galleryItems.last();
+                        setTimeout(function(){
+                            $this.processContent(content, currentLink);
+                            $this.options.onPrev.call(this, [ currentLink ]);
+                        }, 250); },
+                    nextLinkFunc = function( e ){
+                        e.preventDefault();
+                        prevNextFlag = 'N';
+                        $this.contentFrameOutEffect();
+                        var index = galleryItems.index(currentLink);
+                        currentLink = galleryItems.eq(index + 1);
+                        if(!$(currentLink).length) currentLink = galleryItems.first();
+                        setTimeout(function(){
+                            $this.processContent(content, currentLink);
+                            $this.options.onNext.call(this, [ currentLink ]);
+                        }, 250); };
 
                 $('.nivo-lightbox-nav').show();
 
 				// Prev
-                $('.nivo-lightbox-prev').off('click').on('click', function(e){
-                    e.preventDefault();
-                    prevNextFlag = 'P';
-                    $this.contentFrameOutEffect();
-                    var index = galleryItems.index(currentLink);
-                    currentLink = galleryItems.eq(index - 1);
-                    if(!$(currentLink).length) currentLink = galleryItems.last();
-                    setTimeout(function(){
-                        $this.processContent(content, currentLink);
-                        $this.options.onPrev.call(this, [ currentLink ]);
-                    }, 250);
-                });
+                $('.nivo-lightbox-prev').off('click').on('click', prevLinkFunc);
+                // swiperight
+                if(hasTouch) $('.nivo-lightbox-content').hammer().on('swiperight', prevLinkFunc);
 
                 // Next
-                $('.nivo-lightbox-next').off('click').on('click', function(e){
-                    e.preventDefault();
-                    prevNextFlag = 'N';
-                    $this.contentFrameOutEffect();
-                    var index = galleryItems.index(currentLink);
-                    currentLink = galleryItems.eq(index + 1);
-                    if(!$(currentLink).length) currentLink = galleryItems.first();
-                    setTimeout(function(){
-                        $this.processContent(content, currentLink);
-                        $this.options.onNext.call(this, [ currentLink ]);
-                    }, 250);
-                });
+                $('.nivo-lightbox-next').off('click').on('click', nextLinkFunc);
+                // swipeleft
+                if(hasTouch) $('.nivo-lightbox-content').hammer().on('swipeleft', nextLinkFunc);
             }
 
             setTimeout(function(){
