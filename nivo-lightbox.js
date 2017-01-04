@@ -32,6 +32,11 @@
             return typeof div.ontouchstart === 'function';
         })();
 
+    if (hasTouch) {
+        var hammerLoaded = typeof $.fn.hammer === 'function',
+            mobileLoaded = typeof $.mobile === 'object';
+    }
+
     function NivoLightbox(element, options){
         this.el = element;
         this.$el = $(this.el);
@@ -125,12 +130,22 @@
 				// Prev
                 $('.nivo-lightbox-prev').off('click').on('click', prevLinkFunc);
                 // swiperight
-                if(hasTouch) $('.nivo-lightbox-content').hammer().on('swiperight', prevLinkFunc);
+                if(hammerLoaded){
+                    $('.nivo-lightbox-content').hammer().on('swiperight', prevLinkFunc);
+                }
+                else if(mobileLoaded){
+                    $( document ).on('swiperight', '.nivo-lightbox-content', prevLinkFunc);
+                }
 
                 // Next
                 $('.nivo-lightbox-next').off('click').on('click', nextLinkFunc);
                 // swipeleft
-                if(hasTouch) $('.nivo-lightbox-content').hammer().on('swipeleft', nextLinkFunc);
+                if(hammerLoaded){
+                    $('.nivo-lightbox-content').hammer().on('swipeleft', nextLinkFunc);
+                }
+                else if(mobileLoaded){
+                    $( document ).on('swipeleft', '.nivo-lightbox-content', nextLinkFunc);
+                }
             }
 
             setTimeout(function(){
