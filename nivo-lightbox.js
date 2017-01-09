@@ -128,7 +128,7 @@
                 // preload images
                 galleryItems.each(function(){
                     var href = this.href;
-                    if(this.href.match(/\.(jpeg|jpg|gif|png)$/i) !== null){
+                    if(href.match(/\.(jpeg|jpg|gif|png)$/i) !== null){
                         $('<img>').attr('src', href);
                     }
                 });
