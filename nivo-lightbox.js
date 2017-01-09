@@ -125,6 +125,13 @@
                             $this.options.onNext.call(this, [ currentLink ]);
                         }, 250); };
 
+                // preload images
+                galleryItems.each(function(){
+                    var href = this.href;
+                    if(this.href.match(/\.(jpeg|jpg|gif|png)$/i) !== null){
+                        $('<img>').attr('src', href);
+                    }
+                });
                 $('.nivo-lightbox-nav').show();
 
 				// Prev
