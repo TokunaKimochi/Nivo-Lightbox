@@ -1,0 +1,19 @@
+{
+  "name": "nivo-lightbox",
+  "version": "1.0.0",
+  "description": "Nivo Lightbox =============",
+  "main": "nivo-lightbox.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/TokunaKimochi/Nivo-Lightbox.git"
+  },
+  "author": "TokunaKimochi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TokunaKimochi/Nivo-Lightbox/issues"
+  },
+  "homepage": "https://github.com/TokunaKimochi/Nivo-Lightbox#readme"
+}
