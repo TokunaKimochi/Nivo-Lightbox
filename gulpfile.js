@@ -12,6 +12,7 @@ gulp.task('deploy', function() {
 
 gulp.task('js', function() {
   return gulp.src('./nivo-lightbox.js')
+    .pipe(gulp.dest('./public/'))
     .pipe(uglify())
     .pipe(rename('nivo-lightbox.min.js'))
     .pipe(gulp.dest('./public/'));
