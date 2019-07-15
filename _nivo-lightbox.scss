@@ -20,6 +20,10 @@
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+
+	*, ::after, ::before {
+		box-sizing: content-box;
+	}
 }
 .nivo-lightbox-overlay.nivo-lightbox-open {
 	visibility: visible;
@@ -77,6 +81,10 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	/* https://bugzilla.mozilla.org/show_bug.cgi?id=308801 */
+
+	*, ::after, ::before {
+		box-sizing: content-box;
+	}
 }
 .nivo-lightbox-error {
 	display: table;
