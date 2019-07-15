@@ -1,30 +1,30 @@
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var sass = require('gulp-ruby-sass');
-var rename = require('gulp-rename');
+const gulp = require('gulp');
+const uglify = require('gulp-uglify');
+const sass = require('gulp-sass');
+const rename = require('gulp-rename');
 
-var ghPages = require('gulp-gh-pages');
+const ghPages = require('gulp-gh-pages');
 
-gulp.task('deploy', function() {
-  return gulp.src('./public/**/*')
-    .pipe(ghPages());
-});
+function deploy() {
+    return gulp.src('./public/**/*')
+        .pipe(ghPages());
+}
 
-gulp.task('js', function() {
-  return gulp.src('./nivo-lightbox.js')
-    .pipe(gulp.dest('./public/'))
-    .pipe(uglify())
-    .pipe(rename('nivo-lightbox.min.js'))
-    .pipe(gulp.dest('./public/'));
-});
+function js() {
+    return gulp.src('./nivo-lightbox.js')
+        .pipe(uglify())
+        .pipe(rename('nivo-lightbox.min.js'))
+        .pipe(gulp.dest('./public'));
+}
 
-gulp.task('css', function () {
-  return sass('./themes/default/default.scss', {
-    style: 'compressed'
-    })
-    .on('error', sass.logError)
-    .pipe(rename('nivo-lightbox.min.css'))
-    .pipe(gulp.dest('./public/'));
-});
+function css() {
+    return gulp.src('./themes/default/default.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(rename('nivo-lightbox.min.css'))
+        .pipe(gulp.dest('./public'));
+}
 
-gulp.task('default', ['js', 'css']);
+exports.deploy = deploy;
+exports.js = js;
+exports.css = css;
+exports.default = gulp.parallel(js, css);
